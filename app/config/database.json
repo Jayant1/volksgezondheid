@@ -1,0 +1,99 @@
+{
+  "sandbox": {
+    "username": "gezond_admin",
+    "password": "jay123",
+    "database": "gezondheidsregister",
+    "host": "volksgezondheid-db.gov.sr",
+    "port": "3306",
+    "dialect": "mariadb",
+    "timezone": "-03:00",
+    "operatorsAliases": 0,
+    "define": {
+      "timestamps": false
+    },
+    "dialectOptions": {
+      "connectTimeout": 60000
+    },
+    "pool": {
+      "handleDisconnects": true,
+      "max": 10,
+      "min": 2,
+      "idle": 30000,
+      "acquire": 60000,
+      "evict": 1000
+    },
+    "logging": true
+  },
+  "development_https": {
+    "username": "root",
+    "password": "root",
+    "database": "gezondheidsregister",
+    "host": "localhost",
+    "port": "3306",
+    "dialect": "mariadb",
+    "timezone": "-03:00",
+    "operatorsAliases": 0,
+    "define": {
+      "timestamps": false
+    },
+    "dialectOptions": {
+      "connectTimeout": 60000
+    },
+    "pool": {
+      "handleDisconnects": true,
+      "max": 10,
+      "min": 2,
+      "idle": 30000,
+      "acquire": 60000,
+      "evict": 1000
+    }
+  },
+  "localhost": {
+    "username": "root",
+    "password": "root",
+    "database": "gezondheidsregister",
+    "host": "localhost",
+    "dialect": "mariadb",
+    "timezone": "-03:00",
+    "operatorsAliases": 0,
+    "define": {
+      "timestamps": false
+    },
+    "dialectOptions": {
+      "connectTimeout": 60000
+    },
+    "pool": {
+      "handleDisconnects": true,
+      "max": 10,
+      "min": 2,
+      "idle": 30000,
+      "acquire": 60000,
+      "evict": 1000
+    }
+  },
+  "production": {
+    "username": "gezond_admin",
+    "password": "jay123",
+    "database": "gezondheidsregister",
+    "host": "volksgezondheid-db.gov.sr",
+    "port": "3306",
+    "dialect": "mariadb",
+    "timezone": "-03:00",
+    "operatorsAliases": 0,
+    "define": {
+      "timestamps": false
+    },
+    "dialectOptions": {
+      "connectTimeout": 60000
+    },
+    "pool": {
+      "handleDisconnects": true,
+      "max": 10,
+      "min": 2,
+      "idle": 30000,
+      "acquire": 60000,
+      "evict": 1000
+    },
+    "logging": true
+  }
+}

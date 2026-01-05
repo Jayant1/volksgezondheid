@@ -1,0 +1,33 @@
+{
+  "name": "volksgezondheid-api",
+  "version": "1.0.0",
+  "description": "REST API Gezondheidsregister - Ministerie van Volksgezondheid",
+  "main": "api_volksgezondheid.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node api_volksgezondheid.js",
+    "dev": "nodemon api_volksgezondheid.js",
+    "production": "SSL_KEY=/etc/ssl/volksgezondheid/privkey.pem SSL_CERT=/etc/ssl/volksgezondheid/fullchain.pem NODE_ENV=production node api_volksgezondheid.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jayant1/volksgezondheid.git"
+  },
+  "author": "Mathoera Jayant",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jayant1/volksgezondheid/issues"
+  },
+  "homepage": "https://github.com/Jayant1/volksgezondheid#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "mariadb": "^3.4.5",
+    "nodemon": "^3.1.10",
+    "sequelize": "^6.37.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
