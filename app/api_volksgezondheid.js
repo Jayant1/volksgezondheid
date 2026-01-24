@@ -59,6 +59,11 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to volksgezondheid API application - Gezondheidsregister Systeem." });
 });
 
+// OpenAPI spec endpoint voor X-Road
+app.get('/api/openapi.json', (req, res) => {
+  res.json(swaggerSpec);
+});
+
 // Import routes
 require("./routes/gezondheid.route.js")(app);
 
