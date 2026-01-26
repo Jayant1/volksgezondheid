@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'volksgezondheid-api',
+      name: 'api-vwa.gov.sr',
       script: '/root/volksgezondheid/app/api_volksgezondheid.js',
       instances: 1,
       autorestart: true,

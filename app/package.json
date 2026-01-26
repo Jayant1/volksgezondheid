@@ -1,5 +1,5 @@
 {
-  "name": "volksgezondheid-api",
+  "name": "api-vwa.gov.sr",
   "version": "1.0.0",
   "description": "REST API Gezondheidsregister - Ministerie van Volksgezondheid",
   "main": "api_volksgezondheid.js",

@@ -3,6 +3,7 @@ const cors = require("cors");
 const https = require("https");
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
 
 const app = express();
 
@@ -41,7 +42,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'https://volksgezondheid-api.gov.sr:3000',
+        url: 'https://api-volksgezondheid.gov.sr:3000',
         description: 'Sandbox omgeving'
       }
     ]
@@ -68,8 +69,9 @@ app.get('/api/openapi.json', (req, res) => {
 require("./routes/gezondheid.route.js")(app);
 
 const env = (process.env.NODE_ENV || "development").trim();
-const hostname = process.env.HOST || "0.0.0.0";
+const hostname = process.env.HOST || "localhost";
 const portnumber = process.env.PORT || 3000;
+const prod_hostname = os.hostname() + ".gov.sr";
 
 // SSL configuratie
 const sslKeyPath = process.env.SSL_KEY || '/etc/ssl/volksgezondheid/privkey.pem';
@@ -83,14 +85,14 @@ if (env === "production" || env === "sandbox") {
       cert: fs.readFileSync(sslCertPath)
     };
     
-    https.createServer(sslOptions, app).listen(portnumber, hostname, () => {
-      console.log(`HTTPS Server is running on https://${hostname}:${portnumber}/`);
-      console.log(`API Documentation: https://${hostname}:${portnumber}/api/docs`);
+    https.createServer(sslOptions, app).listen(portnumber, () => {
+      console.log(`HTTPS Server is running on https://${prod_hostname}:${portnumber}/`);
+      console.log(`API Documentation: https://${prod_hostname}:${portnumber}/api/docs`);
     });
   } catch (err) {
     console.error('SSL certificaat niet gevonden, start HTTP server:', err.message);
-    app.listen(portnumber, hostname, () => {
-      console.log(`HTTP Server is running on http://${hostname}:${portnumber}/`);
+    app.listen(portnumber, () => {
+      console.log(`HTTP Server is running on http://${prod_hostname}:${portnumber}/`);
     });
   }
 } else {
