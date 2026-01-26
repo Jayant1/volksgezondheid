@@ -42,7 +42,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'https://api-volksgezondheid.gov.sr:3000',
+        url: 'https://api-vwa.gov.sr:3000',
         description: 'Sandbox omgeving'
       }
     ]
