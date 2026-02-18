@@ -21,8 +21,7 @@
       "idle": 30000,
       "acquire": 60000,
       "evict": 1000
-    },
-    "logging": false
+    }
   },
   "development_https": {
     "username": "root",
@@ -93,7 +92,6 @@
       "idle": 30000,
       "acquire": 60000,
       "evict": 1000
-    },
-    "logging": true
+    }
   }
 }
