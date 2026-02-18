@@ -11,13 +11,16 @@ module.exports = (sequelize, Sequelize) => {
     },
     wijk_code: {
       type: Sequelize.STRING(10),
-      unique: true,
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
     wijknaam: {
       type: Sequelize.STRING(100),
       allowNull: false
     }
+  }, {
+    tableName: 'wijken',
+    timestamps: false
   });
 
   wijken.associate = function(models) {
@@ -25,7 +28,7 @@ module.exports = (sequelize, Sequelize) => {
       foreignKey: 'distrikten_id',
       as: 'distrikt'
     });
-    wijken.hasMany(models.zorginstelling, {
+    wijken.hasMany(models.zorginstellingen, {
       foreignKey: 'wijken_id',
       as: 'zorginstellingen'
     });

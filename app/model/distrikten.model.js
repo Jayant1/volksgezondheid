@@ -7,23 +7,26 @@ module.exports = (sequelize, Sequelize) => {
     },
     distrikt_code: {
       type: Sequelize.STRING(10),
-      unique: true,
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
     distriktnaam: {
       type: Sequelize.STRING(100),
       allowNull: false
     }
+  }, {
+    tableName: 'distrikten',
+    timestamps: false
   });
 
   distrikten.associate = function(models) {
+    distrikten.hasMany(models.zorginstellingen, {
+      foreignKey: 'distrikten_id',
+      as: 'zorginstellingen'
+    });
     distrikten.hasMany(models.wijken, {
       foreignKey: 'distrikten_id',
       as: 'wijken'
-    });
-    distrikten.hasMany(models.zorginstelling, {
-      foreignKey: 'distrikten_id',
-      as: 'zorginstellingen'
     });
   };
 
