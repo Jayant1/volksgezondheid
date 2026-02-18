@@ -66,7 +66,7 @@ app.get('/api/openapi.json', (req, res) => {
 });
 
 // Import routes
-require("./routes/gezondheid.route.js")(app);
+require("./routes/medische_keuringen.route.js")(app);
 
 const env = (process.env.NODE_ENV || "development").trim();
 const hostname = process.env.HOST || "localhost";
