@@ -22,7 +22,7 @@
       "acquire": 60000,
       "evict": 1000
     },
-    "logging": true
+    "logging": false
   },
   "development_https": {
     "username": "root",
