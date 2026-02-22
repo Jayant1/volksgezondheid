@@ -4,8 +4,8 @@
     "password": "jay123",
     "database": "gezondheidsregister",
     "host": "db-vwa.gov.sr",
-    "port": "3306",
-    "dialect": "mariadb",
+    "port": "5432",
+    "dialect": "postgres",
     "timezone": "-03:00",
     "operatorsAliases": 0,
     "define": {
@@ -15,7 +15,6 @@
       "connectTimeout": 60000
     },
     "pool": {
-      "handleDisconnects": true,
       "max": 10,
       "min": 2,
       "idle": 30000,
@@ -24,12 +23,12 @@
     }
   },
   "development_https": {
-    "username": "root",
-    "password": "root",
+    "username": "postgres",
+    "password": "postgres",
     "database": "gezondheidsregister",
     "host": "localhost",
-    "port": "3306",
-    "dialect": "mariadb",
+    "port": "5432",
+    "dialect": "postgres",
     "timezone": "-03:00",
     "operatorsAliases": 0,
     "define": {
@@ -39,7 +38,6 @@
       "connectTimeout": 60000
     },
     "pool": {
-      "handleDisconnects": true,
       "max": 10,
       "min": 2,
       "idle": 30000,
@@ -48,11 +46,12 @@
     }
   },
   "localhost": {
-    "username": "root",
-    "password": "root",
+    "username": "gezond_admin",
+    "password": "jay123",
     "database": "gezondheidsregister",
     "host": "localhost",
-    "dialect": "mariadb",
+    "port": "5432",
+    "dialect": "postgres",
     "timezone": "-03:00",
     "operatorsAliases": 0,
     "define": {
@@ -62,7 +61,6 @@
       "connectTimeout": 60000
     },
     "pool": {
-      "handleDisconnects": true,
       "max": 10,
       "min": 2,
       "idle": 30000,
@@ -75,8 +73,8 @@
     "password": "jay123",
     "database": "gezondheidsregister",
     "host": "db-vwa.gov.sr",
-    "port": "3306",
-    "dialect": "mariadb",
+    "port": "5432",
+    "dialect": "postgres",
     "timezone": "-03:00",
     "operatorsAliases": 0,
     "define": {
@@ -86,7 +84,6 @@
       "connectTimeout": 60000
     },
     "pool": {
-      "handleDisconnects": true,
       "max": 10,
       "min": 2,
       "idle": 30000,

@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false
     },
     keuring_type: {
-      type: Sequelize.ENUM('rijbewijs', 'werk', 'school', 'sport', 'andere'),
+      type: 'keuring_type_enum',
       allowNull: false
     },
     datum_keuring: {
@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false
     },
     uitslag: {
-      type: Sequelize.ENUM('goedgekeurd', 'afgekeurd', 'onder_voorwaarden'),
+      type: 'uitslag_enum',
       allowNull: false
     },
     beperkingen: {

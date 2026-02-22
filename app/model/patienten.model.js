@@ -11,11 +11,11 @@ module.exports = (sequelize, Sequelize) => {
       unique: true
     },
     bloedgroep: {
-      type: Sequelize.ENUM('A', 'B', 'AB', 'O', 'onbekend'),
+      type: 'bloedgroep_type',
       defaultValue: 'onbekend'
     },
     rhesus_factor: {
-      type: Sequelize.ENUM('+', '-', 'onbekend'),
+      type: 'rhesus_factor_type',
       defaultValue: 'onbekend'
     },
     huisarts_zorgverleners_id: {

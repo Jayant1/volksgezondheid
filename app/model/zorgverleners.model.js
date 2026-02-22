@@ -20,7 +20,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true
     },
     type_zorgverlener: {
-      type: Sequelize.ENUM('huisarts', 'specialist', 'verpleegkundige', 'tandarts', 'apotheker', 'fysiotherapeut', 'andere'),
+      type: 'zorgverlener_type_enum',
       allowNull: false
     },
     praktijk_naam: {

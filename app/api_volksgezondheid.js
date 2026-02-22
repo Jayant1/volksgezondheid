@@ -28,6 +28,26 @@ const db = require("./model/index.js");
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
+const env = (process.env.NODE_ENV || "localhost").trim();
+const portnumber = process.env.PORT || 3000;
+
+const getSwaggerServers = () => {
+  if (env === "production" || env === "sandbox") {
+    return [
+      {
+        url: `https://api-vwa.gov.sr:${portnumber}`,
+        description: 'Productie/Sandbox omgeving'
+      }
+    ];
+  }
+  return [
+    {
+      url: `http://localhost:${portnumber}`,
+      description: 'Lokale ontwikkelomgeving'
+    }
+  ];
+};
+
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
@@ -40,12 +60,7 @@ const swaggerOptions = {
         email: 'admin@volksgezondheid.egov.com'
       }
     },
-    servers: [
-      {
-        url: 'https://api-vwa.gov.sr:3000',
-        description: 'Sandbox omgeving'
-      }
-    ]
+    servers: getSwaggerServers()
   },
   apis: [path.join(__dirname, 'routes', '*.js')] // Path to the API docs
 };
@@ -68,9 +83,7 @@ app.get('/api/openapi.json', (req, res) => {
 // Import routes
 require("./routes/medische_keuringen.route.js")(app);
 
-const env = (process.env.NODE_ENV || "development").trim();
 const hostname = process.env.HOST || "localhost";
-const portnumber = process.env.PORT || 3000;
 const prod_hostname = os.hostname() + ".gov.sr";
 
 // SSL configuratie

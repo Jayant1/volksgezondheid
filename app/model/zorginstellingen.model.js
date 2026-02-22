@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false
     },
     type_instelling: {
-      type: Sequelize.ENUM('ziekenhuis', 'kliniek', 'polikliniek', 'gezondheidscentrum', 'apotheek', 'laboratorium', 'andere'),
+      type: 'instelling_type_enum',
       allowNull: false
     },
     adres: {
