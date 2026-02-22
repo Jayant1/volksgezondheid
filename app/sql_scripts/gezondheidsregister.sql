@@ -227,22 +227,45 @@ INSERT INTO zorginstellingen (naam, type_instelling, adres, distrikten_id, wijke
 ('Academisch Ziekenhuis Paramaribo', 'ziekenhuis', 'Flustraat 1', 1, 1, '+597 442222', 'info@azp.sr', 'system'),
 ('Gezondheidscentrum Flora', 'gezondheidscentrum', 'Floraweg 25', 1, 2, '+597 433333', 'info@gcflora.sr', 'system');
 
--- Insert 3 patienten with the specified identificatienummers
+-- Insert 16 patienten with the specified identificatienummers
 INSERT INTO patienten (identificatienummer, bloedgroep, rhesus_factor, huisarts_zorgverleners_id, notities, ingevoerd_door) VALUES
 ('IC001985', 'A', '+', 1, 'Patient in goede gezondheid', 'system'),
+('IC002310', 'B', '+', 1, 'Geen bijzonderheden', 'system'),
+('IC003874', 'O', '-', 1, 'Astma patiënt', 'system'),
+('IC004561', 'AB', '+', 1, 'Hoge bloeddruk', 'system'),
+('IC005101', 'A', '-', 1, 'Geen bijzonderheden', 'system'),
+('IC005202', 'B', '-', 1, 'Allergisch voor noten', 'system'),
+('IC005303', 'O', '+', 1, 'Geen bijzonderheden', 'system'),
 ('IC007890', 'B', '-', 1, 'Allergisch voor penicilline', 'system'),
-('IC007895', 'O', '+', 1, 'Diabetespatiënt type 2', 'system');
+('IC008123', 'A', '+', 1, 'Hartpatiënt', 'system'),
+('IC009456', 'AB', '-', 1, 'Geen bijzonderheden', 'system'),
+('IC010001', 'O', '+', 1, 'Geen bijzonderheden', 'system'),
+('IC010002', 'A', '+', 1, 'Diabetespatiënt type 1', 'system'),
+('IC010003', 'B', '+', 1, 'Geen bijzonderheden', 'system'),
+('IC010004', 'O', '-', 1, 'Epilepsie patiënt', 'system'),
+('IC010005', 'AB', '+', 1, 'Geen bijzonderheden', 'system'),
+('IC010006', 'A', '-', 1, 'Nierpatiënt', 'system');
 
--- Insert sample medische keuringen for the 3 patients
+-- Insert sample medische keuringen for some patients
 INSERT INTO medische_keuringen (patienten_id, keuring_type, datum_keuring, zorgverleners_id, uitslag, beperkingen, datum_geldig_tot, notities, ingevoerd_door) VALUES
 (1, 'rijbewijs', '2026-01-15', 1, 'goedgekeurd', NULL, '2031-01-15', 'Rijbewijskeuring zonder beperkingen', 'system'),
-(2, 'werk', '2026-02-01', 1, 'onder_voorwaarden', 'Geen zware fysieke arbeid', '2027-02-01', 'Werkkeuring met beperkingen vanwege rugklachten', 'system'),
-(3, 'rijbewijs', '2026-02-10', 1, 'goedgekeurd', NULL, '2028-02-10', 'Rijbewijskeuring met verkorte geldigheid vanwege diabetes', 'system');
+(2, 'werk', '2026-01-20', 1, 'goedgekeurd', NULL, '2027-01-20', 'Werkkeuring goedgekeurd', 'system'),
+(3, 'rijbewijs', '2026-01-25', 1, 'onder_voorwaarden', 'Moet astmamedicatie bij zich hebben', '2028-01-25', 'Rijbewijskeuring met voorwaarden', 'system'),
+(4, 'werk', '2026-02-01', 1, 'onder_voorwaarden', 'Geen zware fysieke arbeid', '2027-02-01', 'Werkkeuring met beperkingen vanwege hoge bloeddruk', 'system'),
+(8, 'rijbewijs', '2026-02-05', 1, 'goedgekeurd', NULL, '2031-02-05', 'Rijbewijskeuring zonder beperkingen', 'system'),
+(9, 'werk', '2026-02-10', 2, 'onder_voorwaarden', 'Regelmatige hartcontrole vereist', '2027-02-10', 'Werkkeuring met voorwaarden vanwege hartaandoening', 'system'),
+(12, 'rijbewijs', '2026-02-15', 1, 'goedgekeurd', NULL, '2028-02-15', 'Rijbewijskeuring met verkorte geldigheid vanwege diabetes', 'system'),
+(14, 'rijbewijs', '2026-02-20', 1, 'afgekeurd', 'Epilepsie niet onder controle', NULL, 'Rijbewijskeuring afgekeurd', 'system');
 
 -- Insert sample consultaties
 INSERT INTO consultaties (patienten_id, zorgverleners_id, zorginstellingen_id, datum_consultatie, reden_bezoek, diagnose, behandeling, notities, ingevoerd_door) VALUES
 (1, 1, 2, '2026-01-10', 'Jaarlijkse controle', 'Geen bijzonderheden', 'Geen behandeling nodig', 'Patiënt is in goede gezondheid', 'system'),
-(2, 2, 1, '2026-01-20', 'Rugpijn', 'Hernia L4-L5', 'Fysiotherapie en pijnstillers', 'Verwijzing naar fysiotherapeut', 'system'),
-(3, 1, 2, '2026-02-05', 'Diabetescontrole', 'Diabetes type 2 stabiel', 'Voortzetting huidige medicatie', 'HbA1c waarde: 6.8%', 'system');
+(3, 1, 2, '2026-01-15', 'Astma controle', 'Astma stabiel', 'Voortzetting inhalatiemedicatie', 'Longfunctie goed', 'system'),
+(4, 2, 1, '2026-01-20', 'Bloeddruk controle', 'Hypertensie graad 1', 'Bloeddrukverlagers voorgeschreven', 'Leefstijladviezen gegeven', 'system'),
+(8, 1, 2, '2026-02-01', 'Jaarlijkse controle', 'Geen bijzonderheden', 'Geen behandeling nodig', 'Patiënt is in goede gezondheid', 'system'),
+(9, 2, 1, '2026-02-05', 'Hartcontrole', 'Stabiele angina pectoris', 'Medicatie aangepast', 'ECG normaal', 'system'),
+(12, 1, 2, '2026-02-10', 'Diabetescontrole', 'Diabetes type 1 stabiel', 'Insuline dosering aangepast', 'HbA1c waarde: 7.2%', 'system'),
+(14, 2, 1, '2026-02-15', 'Epilepsie controle', 'Epilepsie niet goed onder controle', 'Medicatie aangepast', 'Aanvallen frequentie verhoogd', 'system'),
+(16, 2, 1, '2026-02-20', 'Niercontrole', 'Chronische nierziekte stadium 3', 'Dieetadvies en medicatie', 'eGFR: 45 ml/min', 'system');
 
 -- Dump completed on 2026-02-21 21:06:55
