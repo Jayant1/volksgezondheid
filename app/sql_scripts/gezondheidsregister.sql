@@ -3,7 +3,31 @@
 -- ------------------------------------------------------
 -- Server version	PostgreSQL
 
--- Create ENUM types first
+-- =============================================
+-- DROP TABLES IN REVERSE ORDER (for dependencies)
+-- =============================================
+DROP TABLE IF EXISTS consultaties CASCADE;
+DROP TABLE IF EXISTS medische_keuringen CASCADE;
+DROP TABLE IF EXISTS patienten CASCADE;
+DROP TABLE IF EXISTS zorginstellingen CASCADE;
+DROP TABLE IF EXISTS wijken CASCADE;
+DROP TABLE IF EXISTS zorgverleners CASCADE;
+DROP TABLE IF EXISTS distrikten CASCADE;
+DROP TABLE IF EXISTS landen CASCADE;
+
+-- =============================================
+-- DROP ENUM TYPES IF EXIST
+-- =============================================
+DROP TYPE IF EXISTS bloedgroep_type CASCADE;
+DROP TYPE IF EXISTS rhesus_factor_type CASCADE;
+DROP TYPE IF EXISTS keuring_type_enum CASCADE;
+DROP TYPE IF EXISTS uitslag_enum CASCADE;
+DROP TYPE IF EXISTS instelling_type_enum CASCADE;
+DROP TYPE IF EXISTS zorgverlener_type_enum CASCADE;
+
+-- =============================================
+-- CREATE ENUM TYPES
+-- =============================================
 CREATE TYPE bloedgroep_type AS ENUM ('A', 'B', 'AB', 'O', 'onbekend');
 CREATE TYPE rhesus_factor_type AS ENUM ('+', '-', 'onbekend');
 CREATE TYPE keuring_type_enum AS ENUM ('rijbewijs', 'werk', 'school', 'sport', 'andere');
@@ -11,55 +35,13 @@ CREATE TYPE uitslag_enum AS ENUM ('goedgekeurd', 'afgekeurd', 'onder_voorwaarden
 CREATE TYPE instelling_type_enum AS ENUM ('ziekenhuis', 'kliniek', 'polikliniek', 'gezondheidscentrum', 'apotheek', 'laboratorium', 'andere');
 CREATE TYPE zorgverlener_type_enum AS ENUM ('huisarts', 'specialist', 'verpleegkundige', 'tandarts', 'apotheker', 'fysiotherapeut', 'andere');
 
---
--- Table structure for table `consultaties`
---
-
-DROP TABLE IF EXISTS consultaties CASCADE;
-CREATE TABLE consultaties (
-  id SERIAL PRIMARY KEY,
-  patienten_id INTEGER NOT NULL,
-  zorgverleners_id INTEGER NOT NULL,
-  zorginstellingen_id INTEGER DEFAULT NULL,
-  datum_consultatie DATE NOT NULL,
-  reden_bezoek VARCHAR(200) DEFAULT NULL,
-  diagnose TEXT DEFAULT NULL,
-  behandeling TEXT DEFAULT NULL,
-  verwezen_naar VARCHAR(200) DEFAULT NULL,
-  datum_vervolgafspraak DATE DEFAULT NULL,
-  notities TEXT DEFAULT NULL,
-  ingevoerd_door VARCHAR(100) DEFAULT NULL,
-  gewijzigd_door VARCHAR(100) DEFAULT NULL,
-  datum_ingevoerd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  datum_gewijzigd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT consult_zorginstelling_id FOREIGN KEY (zorginstellingen_id) REFERENCES zorginstellingen (id),
-  CONSTRAINT consult_gezondheidsdossier_id FOREIGN KEY (patienten_id) REFERENCES patienten (id) ON DELETE CASCADE,
-  CONSTRAINT consult_zorgverlener_id FOREIGN KEY (zorgverleners_id) REFERENCES zorgverleners (id)
-);
-
--- Create indexes
-CREATE INDEX idx_consult_zorginstelling_id ON consultaties (zorginstellingen_id);
-CREATE INDEX idx_consult_gezondheidsdossier ON consultaties (patienten_id);
-CREATE INDEX idx_consult_zorgverlener ON consultaties (zorgverleners_id);
-CREATE INDEX idx_consult_datum ON consultaties (datum_consultatie);
+-- =============================================
+-- CREATE TABLES IN CORRECT ORDER (base tables first)
+-- =============================================
 
 --
--- Table structure for table `distrikten`
+-- Table structure for table `landen` (no FK dependencies)
 --
-
-DROP TABLE IF EXISTS distrikten CASCADE;
-CREATE TABLE distrikten (
-  id SERIAL PRIMARY KEY,
-  distrikt_code VARCHAR(10) NOT NULL,
-  distriktnaam VARCHAR(100) NOT NULL,
-  UNIQUE (distrikt_code)
-);
-
---
--- Table structure for table `landen`
---
-
-DROP TABLE IF EXISTS landen CASCADE;
 CREATE TABLE landen (
   id SERIAL PRIMARY KEY,
   land_code VARCHAR(3) NOT NULL,
@@ -68,99 +50,32 @@ CREATE TABLE landen (
 );
 
 --
--- Table structure for table `medische_keuringen`
+-- Table structure for table `distrikten` (no FK dependencies)
 --
-
-DROP TABLE IF EXISTS medische_keuringen CASCADE;
-CREATE TABLE medische_keuringen (
+CREATE TABLE distrikten (
   id SERIAL PRIMARY KEY,
-  patienten_id INTEGER NOT NULL,
-  keuring_type keuring_type_enum NOT NULL,
-  datum_keuring DATE NOT NULL,
-  zorgverleners_id INTEGER NOT NULL,
-  uitslag uitslag_enum NOT NULL,
-  beperkingen TEXT DEFAULT NULL,
-  datum_geldig_tot DATE DEFAULT NULL,
-  notities TEXT DEFAULT NULL,
-  ingevoerd_door VARCHAR(100) DEFAULT NULL,
-  gewijzigd_door VARCHAR(100) DEFAULT NULL,
-  datum_ingevoerd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  datum_gewijzigd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  distrikt_code VARCHAR(10) NOT NULL,
+  distriktnaam VARCHAR(100) NOT NULL,
+  UNIQUE (distrikt_code)
 );
 
 --
--- Table structure for table `patienten`
+-- Table structure for table `wijken` (FK: distrikten)
 --
-
-DROP TABLE IF EXISTS patienten CASCADE;
-CREATE TABLE patienten (
-  id SERIAL PRIMARY KEY,
-  identificatienummer VARCHAR(20) NOT NULL,
-  bloedgroep bloedgroep_type DEFAULT 'onbekend',
-  rhesus_factor rhesus_factor_type DEFAULT 'onbekend',
-  huisarts_zorgverleners_id INTEGER DEFAULT NULL,
-  notities TEXT DEFAULT NULL,
-  ingevoerd_door VARCHAR(100) DEFAULT NULL,
-  gewijzigd_door VARCHAR(100) DEFAULT NULL,
-  datum_ingevoerd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  datum_gewijzigd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE (identificatienummer),
-  CONSTRAINT gezondheidsdossier_huisarts_zorgverlener_id FOREIGN KEY (huisarts_zorgverleners_id) REFERENCES zorgverleners (id)
-);
-
--- Create indexes
-CREATE INDEX idx_gezondheidsdossier_identificatie ON patienten (identificatienummer);
-CREATE INDEX idx_gezondheidsdossier_huisarts ON patienten (huisarts_zorgverleners_id);
-
---
--- Table structure for table `wijken`
---
-
-DROP TABLE IF EXISTS wijken CASCADE;
 CREATE TABLE wijken (
   id SERIAL PRIMARY KEY,
   distrikten_id INTEGER NOT NULL,
   wijk_code VARCHAR(10) NOT NULL,
   wijknaam VARCHAR(100) NOT NULL,
   UNIQUE (wijk_code),
-  CONSTRAINT distrikten_id FOREIGN KEY (distrikten_id) REFERENCES distrikten (id)
+  CONSTRAINT fk_wijken_distrikten FOREIGN KEY (distrikten_id) REFERENCES distrikten (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
--- Create indexes
 CREATE INDEX idx_wijken_distrikten_id ON wijken (distrikten_id);
 
 --
--- Table structure for table `zorginstellingen`
+-- Table structure for table `zorgverleners` (no FK dependencies)
 --
-
-DROP TABLE IF EXISTS zorginstellingen CASCADE;
-CREATE TABLE zorginstellingen (
-  id SERIAL PRIMARY KEY,
-  naam VARCHAR(200) NOT NULL,
-  type_instelling instelling_type_enum NOT NULL,
-  adres VARCHAR(20) NOT NULL,
-  distrikten_id INTEGER NOT NULL,
-  wijken_id INTEGER DEFAULT NULL,
-  telefoon VARCHAR(20) DEFAULT NULL,
-  email VARCHAR(100) DEFAULT NULL,
-  ingevoerd_door VARCHAR(100) DEFAULT NULL,
-  gewijzigd_door VARCHAR(100) DEFAULT NULL,
-  datum_ingevoerd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  datum_gewijzigd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT zorginstelling_distrikten_id FOREIGN KEY (distrikten_id) REFERENCES distrikten (id),
-  CONSTRAINT zorginstelling_wijken_id FOREIGN KEY (wijken_id) REFERENCES wijken (id)
-);
-
--- Create indexes
-CREATE INDEX idx_zorginstelling_wijken_id ON zorginstellingen (wijken_id);
-CREATE INDEX idx_zorginstelling_distrikten ON zorginstellingen (distrikten_id);
-CREATE INDEX idx_zorginstelling_type ON zorginstellingen (type_instelling);
-
---
--- Table structure for table `zorgverleners`
---
-
-DROP TABLE IF EXISTS zorgverleners CASCADE;
 CREATE TABLE zorgverleners (
   id SERIAL PRIMARY KEY,
   identificatienummer VARCHAR(20) NOT NULL,
@@ -179,15 +94,112 @@ CREATE TABLE zorgverleners (
   UNIQUE (registratie_nummer)
 );
 
--- Create indexes
 CREATE INDEX idx_zorgverlener_identificatie ON zorgverleners (identificatienummer);
 CREATE INDEX idx_zorgverlener_registratie ON zorgverleners (registratie_nummer);
 CREATE INDEX idx_zorgverlener_type ON zorgverleners (type_zorgverlener);
 
--- Note: PostgreSQL doesn't have automatic ON UPDATE CURRENT_TIMESTAMP like MySQL
--- You'll need to create a trigger for that functionality if needed
--- Example trigger for one table (you'd need to create similar triggers for all tables):
-/*
+--
+-- Table structure for table `zorginstellingen` (FK: distrikten, wijken)
+--
+CREATE TABLE zorginstellingen (
+  id SERIAL PRIMARY KEY,
+  naam VARCHAR(200) NOT NULL,
+  type_instelling instelling_type_enum NOT NULL,
+  adres VARCHAR(200) NOT NULL,
+  distrikten_id INTEGER NOT NULL,
+  wijken_id INTEGER DEFAULT NULL,
+  telefoon VARCHAR(20) DEFAULT NULL,
+  email VARCHAR(100) DEFAULT NULL,
+  ingevoerd_door VARCHAR(100) DEFAULT NULL,
+  gewijzigd_door VARCHAR(100) DEFAULT NULL,
+  datum_ingevoerd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  datum_gewijzigd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_zorginstelling_distrikten FOREIGN KEY (distrikten_id) REFERENCES distrikten (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_zorginstelling_wijken FOREIGN KEY (wijken_id) REFERENCES wijken (id) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE INDEX idx_zorginstelling_wijken_id ON zorginstellingen (wijken_id);
+CREATE INDEX idx_zorginstelling_distrikten ON zorginstellingen (distrikten_id);
+CREATE INDEX idx_zorginstelling_type ON zorginstellingen (type_instelling);
+
+--
+-- Table structure for table `patienten` (FK: zorgverleners)
+--
+CREATE TABLE patienten (
+  id SERIAL PRIMARY KEY,
+  identificatienummer VARCHAR(20) NOT NULL,
+  bloedgroep bloedgroep_type DEFAULT 'onbekend',
+  rhesus_factor rhesus_factor_type DEFAULT 'onbekend',
+  huisarts_zorgverleners_id INTEGER DEFAULT NULL,
+  notities TEXT DEFAULT NULL,
+  ingevoerd_door VARCHAR(100) DEFAULT NULL,
+  gewijzigd_door VARCHAR(100) DEFAULT NULL,
+  datum_ingevoerd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  datum_gewijzigd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (identificatienummer),
+  CONSTRAINT fk_patienten_huisarts FOREIGN KEY (huisarts_zorgverleners_id) REFERENCES zorgverleners (id) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE INDEX idx_patienten_identificatie ON patienten (identificatienummer);
+CREATE INDEX idx_patienten_huisarts ON patienten (huisarts_zorgverleners_id);
+
+--
+-- Table structure for table `medische_keuringen` (FK: patienten, zorgverleners)
+--
+CREATE TABLE medische_keuringen (
+  id SERIAL PRIMARY KEY,
+  patienten_id INTEGER NOT NULL,
+  keuring_type keuring_type_enum NOT NULL,
+  datum_keuring DATE NOT NULL,
+  zorgverleners_id INTEGER NOT NULL,
+  uitslag uitslag_enum NOT NULL,
+  beperkingen TEXT DEFAULT NULL,
+  datum_geldig_tot DATE DEFAULT NULL,
+  notities TEXT DEFAULT NULL,
+  ingevoerd_door VARCHAR(100) DEFAULT NULL,
+  gewijzigd_door VARCHAR(100) DEFAULT NULL,
+  datum_ingevoerd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  datum_gewijzigd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_keuring_patienten FOREIGN KEY (patienten_id) REFERENCES patienten (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_keuring_zorgverleners FOREIGN KEY (zorgverleners_id) REFERENCES zorgverleners (id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE INDEX idx_keuring_patienten ON medische_keuringen (patienten_id);
+CREATE INDEX idx_keuring_zorgverleners ON medische_keuringen (zorgverleners_id);
+CREATE INDEX idx_keuring_datum ON medische_keuringen (datum_keuring);
+
+--
+-- Table structure for table `consultaties` (FK: patienten, zorgverleners, zorginstellingen)
+--
+CREATE TABLE consultaties (
+  id SERIAL PRIMARY KEY,
+  patienten_id INTEGER NOT NULL,
+  zorgverleners_id INTEGER NOT NULL,
+  zorginstellingen_id INTEGER DEFAULT NULL,
+  datum_consultatie DATE NOT NULL,
+  reden_bezoek VARCHAR(200) DEFAULT NULL,
+  diagnose TEXT DEFAULT NULL,
+  behandeling TEXT DEFAULT NULL,
+  verwezen_naar VARCHAR(200) DEFAULT NULL,
+  datum_vervolgafspraak DATE DEFAULT NULL,
+  notities TEXT DEFAULT NULL,
+  ingevoerd_door VARCHAR(100) DEFAULT NULL,
+  gewijzigd_door VARCHAR(100) DEFAULT NULL,
+  datum_ingevoerd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  datum_gewijzigd TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_consult_patienten FOREIGN KEY (patienten_id) REFERENCES patienten (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_consult_zorgverleners FOREIGN KEY (zorgverleners_id) REFERENCES zorgverleners (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_consult_zorginstellingen FOREIGN KEY (zorginstellingen_id) REFERENCES zorginstellingen (id) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE INDEX idx_consult_patienten ON consultaties (patienten_id);
+CREATE INDEX idx_consult_zorgverleners ON consultaties (zorgverleners_id);
+CREATE INDEX idx_consult_zorginstellingen ON consultaties (zorginstellingen_id);
+CREATE INDEX idx_consult_datum ON consultaties (datum_consultatie);
+
+-- =============================================
+-- TRIGGER FOR AUTO-UPDATE datum_gewijzigd
+-- =============================================
 CREATE OR REPLACE FUNCTION update_modified_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -196,10 +208,11 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
-CREATE TRIGGER update_consultaties_modtime 
-    BEFORE UPDATE ON consultaties 
-    FOR EACH ROW EXECUTE FUNCTION update_modified_column();
-*/
+CREATE TRIGGER update_patienten_modtime BEFORE UPDATE ON patienten FOR EACH ROW EXECUTE FUNCTION update_modified_column();
+CREATE TRIGGER update_zorgverleners_modtime BEFORE UPDATE ON zorgverleners FOR EACH ROW EXECUTE FUNCTION update_modified_column();
+CREATE TRIGGER update_zorginstellingen_modtime BEFORE UPDATE ON zorginstellingen FOR EACH ROW EXECUTE FUNCTION update_modified_column();
+CREATE TRIGGER update_medische_keuringen_modtime BEFORE UPDATE ON medische_keuringen FOR EACH ROW EXECUTE FUNCTION update_modified_column();
+CREATE TRIGGER update_consultaties_modtime BEFORE UPDATE ON consultaties FOR EACH ROW EXECUTE FUNCTION update_modified_column();
 
 -- =============================================
 -- INSERT SAMPLE DATA

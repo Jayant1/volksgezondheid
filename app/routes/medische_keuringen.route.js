@@ -152,4 +152,94 @@ module.exports = function(app) {
     "/api/laatste_medische_keuring/:id_nummer",
     controller.laatsteMedischeKeuring
   );
+
+  // ==================== INVOEREN MEDISCHE KEURING ROUTE ====================
+
+  /**
+   * @swagger
+   * /api/medische_keuring:
+   *   post:
+   *     summary: Invoeren van een nieuwe medische keuring
+   *     description: Voegt een nieuwe medische keuring toe voor een patiënt
+   *     tags: [Medische Keuring]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required:
+   *               - identificatienummer
+   *               - zorgverlener_registratie_nummer
+   *               - keuring_type
+   *               - datum_keuring
+   *               - uitslag
+   *             properties:
+   *               identificatienummer:
+   *                 type: string
+   *                 description: Het identificatienummer van de patiënt
+   *                 example: "IC001985"
+   *               zorgverlener_registratie_nummer:
+   *                 type: string
+   *                 description: Het registratienummer van de zorgverlener
+   *                 example: "REG001234"
+   *               keuring_type:
+   *                 type: string
+   *                 enum: [rijbewijs, werk, school, sport, andere]
+   *                 description: Type van de medische keuring
+   *                 example: "rijbewijs"
+   *               datum_keuring:
+   *                 type: string
+   *                 format: date
+   *                 description: Datum van de keuring (YYYY-MM-DD)
+   *                 example: "2026-03-09"
+   *               uitslag:
+   *                 type: string
+   *                 enum: [goedgekeurd, afgekeurd, onder_voorwaarden]
+   *                 description: Uitslag van de keuring
+   *                 example: "goedgekeurd"
+   *               beperkingen:
+   *                 type: string
+   *                 description: Eventuele beperkingen (optioneel)
+   *                 example: "Geen nachtrijden"
+   *               datum_geldig_tot:
+   *                 type: string
+   *                 format: date
+   *                 description: Datum tot wanneer de keuring geldig is (optioneel)
+   *                 example: "2031-03-09"
+   *               notities:
+   *                 type: string
+   *                 description: Aanvullende notities (optioneel)
+   *                 example: "Keuring zonder bijzonderheden verlopen"
+   *               ingevoerd_door:
+   *                 type: string
+   *                 description: Naam van de persoon die de keuring invoert (optioneel)
+   *                 example: "admin"
+   *     responses:
+   *       201:
+   *         description: Medische keuring succesvol ingevoerd
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   *                 message:
+   *                   type: string
+   *                   example: "Medische keuring succesvol ingevoerd"
+   *                 data:
+   *                   $ref: '#/components/schemas/MedischeKeuring'
+   *       400:
+   *         description: Validatiefout - verplichte velden ontbreken of ongeldige waarden
+   *       404:
+   *         description: Patiënt of zorgverlener niet gevonden
+   *       500:
+   *         description: Server fout
+   */
+  app.post(
+    "/api/medische_keuring",
+    controller.invoerMedischeKeuring
+  );
 };
