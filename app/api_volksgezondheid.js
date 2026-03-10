@@ -36,7 +36,7 @@ const getSwaggerServers = () => {
     return [
       {
         url: `https://api-vwa.gov.sr:${portnumber}`,
-        description: 'Productie/Sandbox omgeving'
+        description: 'Sandbox omgeving'
       }
     ];
   }
