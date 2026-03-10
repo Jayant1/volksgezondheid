@@ -52,7 +52,7 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'volksgezondheid subsysteem (Ministerie van Volksgezondheid - Gezondheidsregister)',
+      title: 'Volksgezondheid subsysteem (Ministerie van Volksgezondheid - Gezondheidsregister)',
       version: '1.0.0',
       description: 'REST API voor beheer van gezondheidsdossiers, zorgverleners, zorginstellingen en medische gegevens',
       contact: {
