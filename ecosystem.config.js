@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'sandbox-api-vwa',
+      name: 'sandbox-api-is4h',
       script: '/root/volksgezondheid/app/api_volksgezondheid.js',
       instances: 1,
       autorestart: true,
