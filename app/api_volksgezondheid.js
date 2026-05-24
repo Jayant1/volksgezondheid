@@ -35,7 +35,7 @@ const getSwaggerServers = () => {
   if (env === "production" || env === "sandbox") {
     return [
       {
-        url: `https://api-vwa.gov.sr:${portnumber}`,
+        url: `https://is4h-api.gov.sr:${portnumber}`,
         description: 'Sandbox omgeving'
       }
     ];

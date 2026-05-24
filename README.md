@@ -45,7 +45,7 @@ pm2 start ecosystem.config.js --env production
 
 Na het starten van de server is de Swagger documentatie beschikbaar op:
 - Development: `http://localhost:3001/api/docs`
-- Production: `https://api-vwa.gov.sr.gov.sr:3001/api/docs`
+- Production: `https://is4h-api.gov.sr.gov.sr:3001/api/docs`
 
 ## API Endpoints
 
