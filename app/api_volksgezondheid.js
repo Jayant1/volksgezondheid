@@ -52,7 +52,7 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'VWA subsysteem (Volksgezondheid Werkgelegendheid en Arbeid - Gezondheidsregister)',
+      title: 'IS4H subsysteem (Informatiesysteem voor Gezondheid - Gezondheidsregister)',
       version: '1.0.0',
       description: 'REST API voor beheer van gezondheidsdossiers, zorgverleners, zorginstellingen en medische gegevens',
       contact: {
